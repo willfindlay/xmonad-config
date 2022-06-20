@@ -1,5 +1,7 @@
 # William Findlay's Xmonad Configs
 
+Warning: I'll probably be force pushing to main for a bit until things are more finalized.
+
 ## Polybar
 
 ```
