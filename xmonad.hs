@@ -2,9 +2,7 @@ import XMonad
 import XMonad.Config.Desktop
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Prompt.ConfirmPrompt
-import XMonad.Hooks.DynamicLog
 import XMonad.Util.SpawnOnce
-import XMonad.Hooks.StatusBar
 import System.Exit
 
 import qualified XMonad.StackSet as W
