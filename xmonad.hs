@@ -4,14 +4,14 @@ import XMonad.Hooks.EwmhDesktops
 import XMonad.Prompt.ConfirmPrompt
 import XMonad.Hooks.DynamicLog
 import XMonad.Util.SpawnOnce
+import XMonad.Hooks.StatusBar
 import System.Exit
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map as M
-import qualified DBus as D
-import qualified DBus.Client as D
 
 import qualified Icons
+import qualified Colors
 
 -- Use tux key as mod
 myMod = mod4Mask
@@ -38,7 +38,7 @@ myWorkspaces = [
 
 -- Startup hook
 myStartupHook = do
-    spawnOnce "$HOME/.config/polybar/launch.sh"
+    spawn "$HOME/.config/polybar/launch.sh"
     spawnOnce "setbg $HOME/.cache/bg"
 
 -- Commands to run in keybindings
@@ -68,38 +68,15 @@ myKeys conf@XConfig {XMonad.modMask = modm, XMonad.terminal = term} = M.fromList
 -- Main entrypoint
 main :: IO()
 main = do
-    -- Spawn dbus client
-    dbus <- D.connectSession
-    _ <- D.requestName dbus (D.busName_ "org.xmonad.Log")
-        [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
-
     -- Define config options
-    xmonad $ ewmh desktopConfig
+    xmonad $ ewmh $ ewmhFullscreen $ desktopConfig
         {
         terminal = myTerminal
         , modMask = myMod
         , workspaces = myWorkspaces
         , keys = myKeys
-        , logHook = dynamicLogWithPP (dbusLogHook dbus)
         , startupHook = myStartupHook
+        , borderWidth = 1
+        , focusedBorderColor = Colors.green
+        , normalBorderColor = Colors.black
         }
-
--- A log hook for producing dbus events
-dbusLogHook :: D.Client -> PP
-dbusLogHook dbus = def {
-        ppOutput = dbusOutput dbus
-        , ppCurrent = id
-        -- , ppCurrent = wrap ("%{B" ++ bg2 ++ "} ") " %{B-}"
-    }
-
--- A helper to log events to dbus
-dbusOutput :: D.Client -> String -> IO ()
-dbusOutput dbus str = do
-    let signal = (D.signal objectPath interfaceName memberName) {
-        D.signalBody = [D.toVariant str]
-    }
-    D.emit dbus signal
-    where
-        objectPath = D.objectPath_ "/org/xmonad/Log"
-        interfaceName = D.interfaceName_ "org.xmonad.Log"
-        memberName = D.memberName_ "Update"
