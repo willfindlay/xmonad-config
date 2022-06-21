@@ -22,7 +22,7 @@ library
 
 executable xmonad-config-exe
   main-is: xmonad.hs
-  ghc-options: -Wall -Werror -fno-warn-missing-signatures -threaded
+  ghc-options: -Wall -fno-warn-missing-signatures -threaded
   build-depends:
       base
     , xmonad
