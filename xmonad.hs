@@ -86,7 +86,7 @@ myKeys conf@XConfig {XMonad.modMask = modm, XMonad.terminal = term} = M.fromList
     -- M-S-[1..=] -> Move window to workspace
     [((m .|. modm, k), windows $ f i)
         | (i, k) <- zip (XMonad.workspaces conf) ([xK_1 .. xK_9] ++ [xK_0, xK_minus, xK_equal])
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
     -- TODO: have ctrl switch workspaces between windows
     -- See https://stackoverflow.com/q/54581406
 
