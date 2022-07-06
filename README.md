@@ -19,7 +19,7 @@ label-active-padding = 2
 label-occupied = %icon% %name%
 label-occupied-padding = 2
 
-label-urgent = %icon% %name%
+label-urgent = %icon%
 label-urgent-background = ${colors.alert}
 label-urgent-padding = 2
 
